@@ -15,5 +15,6 @@
 	<modules>
 		<module>app.core</module>
 		<module>app.ui</module>
+		<module>server</module>
 	</modules>
 </project>
