@@ -2,7 +2,11 @@ package tdt4140.gr1808.server;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.json.JSONException;
@@ -20,8 +24,6 @@ public class ServerParserTest {
 		parser = new ServerParser();
 		hashMap = new HashMap<String, String>();
 	}
-
-	//TODO skrive eventuelle tester for stringify() og deStringify()
 
 	@Test
 	public void tests_decode_add_user() throws JSONException {
@@ -195,5 +197,29 @@ public class ServerParserTest {
 		}
 
 		assertTrue(errorString.equals("java.lang.IllegalArgumentException: The HashMap given as an argument is empty."));
+	}
+	
+	@Test
+	public void tests_deStringify() {
+		String dataString = "88_1997-11-27 13:25:33,89_1997-11-27 13:25:34";
+		List<Touple> resultList = new ArrayList<Touple>();
+		resultList.add(new Touple("88", "1997-11-27 13:25:33"));
+		resultList.add(new Touple("89", "1997-11-27 13:25:34"));
+		
+		List<Touple> toupleList = parser.deStringify(dataString);
+		
+		assertTrue(resultList.get(0).getPuls().equals(toupleList.get(0).getPuls()));
+		assertTrue(resultList.get(0).getDateTime().equals(toupleList.get(0).getDateTime()));
+		assertTrue(resultList.get(1).getPuls().equals(toupleList.get(1).getPuls()));
+		assertTrue(resultList.get(1).getDateTime().equals(toupleList.get(1).getDateTime()));
+	}
+	
+	@Test
+	public void tests_deStringify_empty() {
+		String dataString = "";
+		List<Touple> resultList = new ArrayList<Touple>();
+		List<Touple> toupleList = parser.deStringify(dataString);
+		
+		assertTrue(resultList.equals(toupleList));
 	}
 }

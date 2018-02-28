@@ -2,15 +2,15 @@ package tdt4140.gr1808.server;
 
 public class Touple {
 	
-	private int puls;
+	private String puls;
 	private String dateTime;
 	
-	public Touple(int puls, String dateTime) {
+	public Touple(String puls, String dateTime) {
 		this.puls = puls;
 		this.dateTime = dateTime;
 	}
 	
-	public int getPuls() {
+	public String getPuls() {
 		return puls;
 	}
 	

@@ -11,8 +11,7 @@ import java.util.List;
 /*
  * This parser decodes JsonObjects into HashMaps with decode()
  * Does the opposite with encode()
- * Stringifies data from a List [puls, datetime, puls, datetime...] with stringify()
- * Does the oppositte with deStringify
+ * deStringifies data from a String "puls_date time,puls_date time" to an ArrayList [Touple(String puls, String dateTime) with deStringify()
  */
 
 public class ServerParser {
@@ -72,14 +71,29 @@ public class ServerParser {
 
 	}
 
-	public String stringify(List<String> dataList) {
-		//TODO
-		return "hei";
-	}
-
-	public List<String> deStringify(String dataString) {
-		//TODO
-		return new ArrayList<String>();
+	public List<Touple> deStringify(String dataString) {
+		List<Touple> dataList = new ArrayList<Touple>();
+		
+		//Checks if the string is empty or if it does not contain "_" (that is the format is severely wrong) 
+		if (dataString.length() == 0 || !dataString.contains("_")) {
+			return dataList;
+		}
+		
+		//Splits the string into datapoints on the form "puls_date time,puls_date time"
+		String[] dataArray = dataString.split(",");
+		
+		
+		
+		for (int i = 0; i < dataArray.length; i++) {
+			//Splits the datapoints into ["puls", "datetime"]
+			String[] toupleArray = dataArray[i].split("_"); 
+			
+			
+			Touple dataTouple = new Touple(toupleArray[0], toupleArray[1]);
+			dataList.add(dataTouple);
+		}
+		
+		return dataList;
 	}
 
 	// Helper methods for encode------------------------------------------------------------------------------------------------------------------
