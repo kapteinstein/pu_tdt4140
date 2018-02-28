@@ -132,6 +132,18 @@ public class ServerParserTest {
 	}
 
 	@Test
+	public void tests_encode_message_2() throws JSONException {
+		jsonObject.put("mode", "non_existing");
+		jsonObject.put("type", "message");
+		jsonObject.put("data", "dummy");
+
+		hashMap = parser.decode(jsonObject);
+		assertTrue(hashMap.get("mode").equals("response"));
+		assertTrue(hashMap.get("type").equals("error"));
+		assertTrue(hashMap.get("data").equals("There is no such mode as: non_existing"));
+	}
+
+	@Test
 	public void tests_encode_error() throws JSONException {
 		hashMap.put("mode", "response");
 		hashMap.put("type", "error");
