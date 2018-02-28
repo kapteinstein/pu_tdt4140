@@ -27,10 +27,12 @@ public class ServerParserTest {
 	public void tests_decode_add_user() throws JSONException {
 		jsonObject.put("mode", "add_user");
 		jsonObject.put("user_type", "datagiver");
+		jsonObject.put("target_user_id", "1");
 		jsonObject.put("name", "Peter Pukk");
 
 		hashMap.put("mode", "add_user");
 		hashMap.put("user_type", "datagiver");
+		hashMap.put("target_user_id", "1");
 		hashMap.put("name", "Peter Pukk");
 
 		assertTrue(hashMap.equals(parser.decode(jsonObject)));
@@ -40,9 +42,11 @@ public class ServerParserTest {
 	public void tests_decode_delete_user() throws JSONException {
 		jsonObject.put("mode", "delete_user");
 		jsonObject.put("user_id", "11");
+		jsonObject.put("target_user_id", "1");
 
 		hashMap.put("mode", "delete_user");
 		hashMap.put("user_id", "11");
+		hashMap.put("target_user_id", "1");
 
 		assertTrue(hashMap.equals(parser.decode(jsonObject)));
 	}
@@ -51,12 +55,14 @@ public class ServerParserTest {
 	public void tests_decode_delete_data() throws JSONException {
 		jsonObject.put("mode", "delete_data");
 		jsonObject.put("user_id", "11");
+		jsonObject.put("target_user_id", "1");
 		jsonObject.put("data_type", "puls");
 		jsonObject.put("start_datetime", "1997-11-27 13:25:33");
 		jsonObject.put("end_datetime", "1997-11-28 13:25:33");
 
 		hashMap.put("mode", "delete_data");
 		hashMap.put("user_id", "11");
+		hashMap.put("target_user_id", "1");
 		hashMap.put("data_type", "puls");
 		hashMap.put("start_datetime", "1997-11-27 13:25:33");
 		hashMap.put("end_datetime", "1997-11-28 13:25:33");
@@ -68,11 +74,13 @@ public class ServerParserTest {
 	public void tests_decode_add_data() throws JSONException {
 		jsonObject.put("mode", "add_data");
 		jsonObject.put("user_id", "11");
+		jsonObject.put("target_user_id", "1");
 		jsonObject.put("data_type", "puls");
 		jsonObject.put("data", "88_1997-11-27 13:25:33,88_1997-11-27 13:26:33");
 
 		hashMap.put("mode", "add_data");
 		hashMap.put("user_id", "11");
+		hashMap.put("target_user_id", "1");
 		hashMap.put("data_type", "puls");
 		hashMap.put("data", "88_1997-11-27 13:25:33,88_1997-11-27 13:26:33");
 
@@ -83,12 +91,14 @@ public class ServerParserTest {
 	public void tests_decode_get_data() throws JSONException {
 		jsonObject.put("mode", "get_data");
 		jsonObject.put("user_id", "11");
+		jsonObject.put("target_user_id", "1");
 		jsonObject.put("data_type", "puls");
 		jsonObject.put("start_datetime", "1997-11-27 13:25:33");
 		jsonObject.put("end_datetime", "1997-11-28 13:25:33");
 
 		hashMap.put("mode", "get_data");
 		hashMap.put("user_id", "11");
+		hashMap.put("target_user_id", "1");
 		hashMap.put("data_type", "puls");
 		hashMap.put("start_datetime", "1997-11-27 13:25:33");
 		hashMap.put("end_datetime", "1997-11-28 13:25:33");
@@ -108,6 +118,7 @@ public class ServerParserTest {
 	public void tests_decode_wrong_key() throws JSONException {
 		jsonObject.put("mode", "get_data");
 		jsonObject.put("user_id", "11");
+		jsonObject.put("target_user_id", "1");
 		jsonObject.put("data_type", "puls");
 		jsonObject.put("start_datetime", "1997-11-27 13:25:33");
 		jsonObject.put("end_d77777atetime", "1997-11-28 13:25:33");
