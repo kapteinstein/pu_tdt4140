@@ -10,11 +10,10 @@ Connection con;
 		this.con = connect();
 	}
 	
-	
+	//Establishes a connection to the database
 	public Connection connect() {
-		
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://mysql.stud.ntnu.no:3306/hkmardal_databasen", "hkmardal_admin", "sommer");
 			return con;
 		} catch(Exception e) {
@@ -24,19 +23,7 @@ Connection con;
 		}
 	}
 	
-	public ResultSet getResultSet(String set) {
-		try {
-			Statement stmnt = con.createStatement();
-			ResultSet rs = stmnt.executeQuery("select * from " + set);
-			stmnt.close();
-			return rs;
-		} catch(Exception e) {
-			System.out.println("Could not get result set " + set);
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
+	//Adds a user to the database
 	public void addUser(String user_type, String name) {
 		try {
 			Statement stmnt = con.createStatement();
@@ -48,6 +35,7 @@ Connection con;
 		}
 	}
 	
+	//Deletes a user from the database
 	public void deleteUser(String user_id) {
 		try {
 			Statement stmnt = con.createStatement();
@@ -59,6 +47,7 @@ Connection con;
 		}
 	}
 	
+	//Deletes pulse data for a given user for a given time-period from the database
 	public void deletePulseData(String user_id, String data_type, String start_datetime, String end_datetime) {
 		try {
 			Statement stmnt = con.createStatement();
@@ -70,6 +59,7 @@ Connection con;
 		}
 	}
 	
+	//Adds pulse data for a given user for a given time-period to the database
 	public void addPulseData(String user_id, String data_type, String pulse, String timeStamp) {
 		try {
 			Statement stmnt = con.createStatement();
@@ -82,14 +72,16 @@ Connection con;
 		}
 	}
 	
+	//Returns pulse data on the format "pulse_timestamp, pulse_timestamp, ..."
 	public String getPulseData(String user_id, String data_type, String start_datetime, String end_datetime) {
-		String str = null;
+		String str = "";
 		try {
 			Statement stmnt = con.createStatement();
 			ResultSet rs = stmnt.executeQuery("select pulse, time_stamp from data_super natural join pulse_data where user_id = " + user_id + " and time_stamp between \"" + start_datetime + "\" and \"" + end_datetime + "\"");
-			if(rs.next()) {
-				str = Integer.toString(rs.getInt(1)) + "_" + rs.getString(2);
+			while(rs.next()) {
+				str += Integer.toString(rs.getInt(1)) + "_" + rs.getString(2) + ", ";
 			}
+			str = str.replaceAll(", $", "");
 			stmnt.close();
 			return str;
 		} catch(SQLException e) {
@@ -99,6 +91,7 @@ Connection con;
 		return str;
 	}
 	
+	//Returns user info on the format "user_id user_type name"
 	public String getUser(String user_id) {
 		String user = null;
 		try {
@@ -116,6 +109,7 @@ Connection con;
 		return user;
 	}
 
+	//Returns the user type of a user with a given user_id
 	public String getUserType(String user_id) {
 		String userType = null;
 		try {
@@ -130,6 +124,6 @@ Connection con;
 			System.out.println("Could not get user-type");
 			e.printStackTrace();
 		}
-		return null;
+		return userType;
 	}
 }
