@@ -10,7 +10,7 @@ import java.net.SocketException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class clientConnect {
+public class clientConnect { 
 	
 	private static DBQuery dbquery;
 	private static ServerParser parser;
