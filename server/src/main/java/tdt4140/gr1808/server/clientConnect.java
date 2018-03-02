@@ -20,11 +20,11 @@ public class ClientConnect {
 	private static Socket connectionSocket;
 
 
-	public clientConnect(DBQuery dbq, Parser parser, BufferedReader inputStream, DataOutputStream outputstream, Socket connectionSocket) {
-		this.dbquery = dbq;
+	public ClientConnect(DBQuery dbquery, Parser parser, BufferedReader inputStream, DataOutputStream outputStream, Socket connectionSocket) {
+		this.dbquery = dbquery;
 		this.parser = parser;
 		this.inputStream = inputStream;
-		this.outputStream = outputstream;
+		this.outputStream = outputStream;
 		this.connectionSocket = connectionSocket;
 	}
 
@@ -62,7 +62,8 @@ public class ClientConnect {
 				query.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data"), /*TODO parsedData.get("time_stamp") is this needed?*/)
 				break;
 			case "get_data":
-				query.deletePulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				String data = query.deletePulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				outputStream.writeUTF(data); //Håkon sin oppgave
 				break;
 			default: //ERROR CRAZY????
 		}
