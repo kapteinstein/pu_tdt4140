@@ -20,7 +20,7 @@ public class ClientConnect {
 	private static Socket connectionSocket;
 
 
-	public ClientConnect(DBQuery dbquery, Parser parser, BufferedReader inputStream, DataOutputStream outputStream, Socket connectionSocket) {
+	public ClientConnect(DBQuery dbquery, ServerParser parser, BufferedReader inputStream, DataOutputStream outputStream, Socket connectionSocket) {
 		this.dbquery = dbquery;
 		this.parser = parser;
 		this.inputStream = inputStream;
