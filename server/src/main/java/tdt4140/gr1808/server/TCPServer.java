@@ -21,13 +21,13 @@ public class TCPServer extends Thread {
 	// private ServerParser serverParser;
 	//Opprett DBQuery-objekt
 
-	private TCPServer(int port) throws IOException {
+	public TCPServer(int port) throws IOException {
 		serverSocket = new ServerSocket(port);
 		// serverParser = new ServerParser();
 	}
 
 	public void run() {
-		while (!serverSocket.isClosed()) {
+		while (true) {
 			try {
 				System.out.println("Waiting for client on port " +
 					serverSocket.getLocalPort() + "...");
@@ -46,6 +46,19 @@ public class TCPServer extends Thread {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public int close() {
+		if (!serverSocket.isClosed()) {
+			try {
+				serverSocket.close();
+				return 0;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return 1;
+			}
+		}
+		return 0;  // already closed
 	}
 
 	public static void main(String[] args) {
