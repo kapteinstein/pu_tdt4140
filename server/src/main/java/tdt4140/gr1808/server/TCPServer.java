@@ -18,12 +18,13 @@ import java.net.Socket;
 
 public class TCPServer extends Thread {
 	private ServerSocket serverSocket;
-	// private ServerParser serverParser;
-	//Opprett DBQuery-objekt
+	private ServerParser serverParser;
+	private DBQuery dbquery;
 
 	public TCPServer(int port) throws IOException {
 		serverSocket = new ServerSocket(port);
-		// serverParser = new ServerParser();
+		serverParser = new ServerParser();
+		dbquery = new DBQuery();
 	}
 
 	public void run() {
@@ -40,8 +41,9 @@ public class TCPServer extends Thread {
 
 				//Opprett sendAndRecieve-objekt
 				//sendAndRecieve(DBQuery, serverParser, input, output)
-				TCPClientHelper c = new TCPClientHelper(connectionSocket);
-				c.start();
+				ClientConnect clientConnect = new ClientConnect(dbquery, serverParser,
+					input, output, connectionSocket);
+				clientConnect.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
