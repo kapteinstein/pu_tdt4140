@@ -51,7 +51,8 @@ Connection con;
 	public void deletePulseData(String user_id, String data_type, String start_datetime, String end_datetime) {
 		try {
 			Statement stmnt = con.createStatement();
-			stmnt.executeUpdate("delete from data_super where user_id = " + user_id + " and time_stamp between \"" + start_datetime + "\" and \"" + end_datetime + "\"");
+			stmnt.executeUpdate("delete from data_super where user_id = " + user_id + " and time_stamp between \"" + 
+					start_datetime + "\" and \"" + end_datetime + "\"");
 			stmnt.close();
 		} catch(Exception e) {
 			System.out.println("Could not delete data");
@@ -72,16 +73,17 @@ Connection con;
 		}
 	}
 	
-	//Returns pulse data on the format "pulse_timestamp, pulse_timestamp, ..."
+	//Returns pulse data on the format "pulse_timestamp,pulse_timestamp, ..."
 	public String getPulseData(String user_id, String data_type, String start_datetime, String end_datetime) {
 		String str = "";
 		try {
 			Statement stmnt = con.createStatement();
-			ResultSet rs = stmnt.executeQuery("select pulse, time_stamp from data_super natural join pulse_data where user_id = " + user_id + " and time_stamp between \"" + start_datetime + "\" and \"" + end_datetime + "\"");
+			ResultSet rs = stmnt.executeQuery("select pulse, time_stamp from data_super natural join pulse_data where user_id = " + 
+					user_id + " and time_stamp between \"" + start_datetime + "\" and \"" + end_datetime + "\"");
 			while(rs.next()) {
-				str += Integer.toString(rs.getInt(1)) + "_" + rs.getString(2) + ", ";
+				str += Integer.toString(rs.getInt(1)) + "_" + rs.getString(2) + ",";
 			}
-			str = str.replaceAll(", $", "");
+			str = str.replaceAll(",$", "");
 			stmnt.close();
 			return str;
 		} catch(SQLException e) {
@@ -91,22 +93,22 @@ Connection con;
 		return str;
 	}
 	
-	//Returns user info on the format "user_id user_type name"
-	public String getUser(String user_id) {
-		String user = null;
+	//Returns the username of a user with a given user_id
+	public String getUsername(String user_id) {
+		String username = null;
 		try {
 			Statement stmnt = con.createStatement();
-			ResultSet rs = stmnt.executeQuery("select * from user where user_id = " + user_id);
+			ResultSet rs = stmnt.executeQuery("select name from user where user_id = " + user_id);
 			if (rs.next()) {
-				user = Integer.toString(rs.getInt(1)) + " " + rs.getString(2) + " " + rs.getString(3);
+				username = rs.getString(1);
 			}
 			stmnt.close();
-			return user;
+			return username;
 		} catch(SQLException e) {
-			System.out.println("Could not get user");
+			System.out.println("Could not get username");
 			e.printStackTrace();
 		}
-		return user;
+		return username;
 	}
 
 	//Returns the user type of a user with a given user_id
