@@ -40,7 +40,8 @@ public class TCPServer extends Thread {
 
 				//Opprett sendAndRecieve-objekt
 				//sendAndRecieve(DBQuery, serverParser, input, output)
-
+				TCPClientHelper c = new TCPClientHelper(connectionSocket);
+				c.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
