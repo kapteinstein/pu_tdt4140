@@ -61,7 +61,7 @@ public class ClientConnect extends Thread {
 				dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data"), /*TODO parsedData.get("time_stamp") is this needed?*/)
 				break;
 			case "get_data":
-				String data = dbquery.deletePulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				String data = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
 				outputStream.writeUTF(data); //Håkon sin oppgave
 				break;
 			case "response":
