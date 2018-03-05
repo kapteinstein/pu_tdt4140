@@ -58,14 +58,30 @@ public class ClientConnect implements Runnable {
 				dbquery.deleteUser(parsedData.get("user_id"));
 				break;
 			case "add_data":
-				dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data"), /*TODO parsedData.get("time_stamp") is this needed?*/)
+				dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data") /*TODO parsedData.get("time_stamp") is this needed?*/);
+				case "get_data":
 				break;
-			case "get_data":
-				String data = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+<<<<<<< Updated upstream
+				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				JSONObject data = parser.encode("stringData");
 				outputStream.writeUTF(data); //Håkon sin oppgave
 				break;
 			case "response":
+				
+
 				// maa encodes forst. outputStream.writeUTF(parsedData.get("data"));
+=======
+			case "get_data":
+				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
+				parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				private JSONObject data = parser.encode(stringData);
+				outputStream.writeUTF(data); //Legger dataen som skal til tjenesteyter ut på outputStreamen
+				break;
+			case "response":
+				private JSONObject melding = parser.encode(parsedData);
+				outputStream.writeUTF(melding);
+				// legger HashMap ut på outputStream
+>>>>>>> Stashed changes
 			default: //ERROR CRAZY????
 		}
 		//denne trenger ikke sjekke om brukeren får lov å gjøre denne operasjonen, har allerede sjekket
