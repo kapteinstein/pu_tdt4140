@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ClientConnect extends Thread {
+public class ClientConnect implements Runnable {
 
 	private DBQuery dbquery;
 	private ServerParser parser;
