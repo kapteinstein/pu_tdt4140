@@ -43,7 +43,8 @@ public class TCPServer extends Thread {
 				//sendAndRecieve(DBQuery, serverParser, input, output)
 				ClientConnect clientConnect = new ClientConnect(dbquery, serverParser,
 					input, output, connectionSocket);
-				clientConnect.start();
+				Thread c = new Thread(clientConnect);
+				c.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
