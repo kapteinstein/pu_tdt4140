@@ -41,10 +41,10 @@ public class ClientConnect implements Runnable {
 		//String mode = parsedData.get("mode");
 
 		//sender dataen til metoden som skal kalle rette metoder i DBQuery
-		connect(parsedData);
+		//connect(parsedData);
 	}
 
-	private void connect(HashMap<String, String> parsedData) {
+	private void connect(HashMap<String, String> parsedData) throws Exception {
 		//FORMÅL: få modus, user etc fra en bruker og utføre kommandoen.
 		//Dersom man får returnert data, skal denne sendes på outputStream (kan evt gjøres i egen metode)
 		// DBQuery query = new DBQuery();  // ikke ha med
@@ -59,20 +59,30 @@ public class ClientConnect implements Runnable {
 				break;
 			case "add_data":
         dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data"), parsedData.get("time_stamp"));
-				case "get_data":
 				break;
 			case "get_data":
 				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
-				parsedData.get("start_datetime"), parsedData.get("end_datetime"));
-				private JSONObject data = parser.encode(stringData);
-				outputStream.writeUTF(data); //Legger dataen som skal til tjenesteyter ut på outputStreamen
+														parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				
+			try {
+				outputStream.writeUTF(stringData);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} //Legger dataen som skal til tjenesteyter ut på outputStreamen
 				break;
 			case "response":
-				private JSONObject melding = parser.encode(parsedData);
+				JSONObject data = parser.encode(parsedData);
+				String melding = data.toString();
+			try {
 				outputStream.writeUTF(melding);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				// legger HashMap ut på outputStream
 			default:
-          throw new Exception("This should never happen. Something is wrong in the ServerParser class")
+            throw new Exception("This should never happen. Something is wrong in the ServerParser class");
 		}
 		//denne trenger ikke sjekke om brukeren får lov å gjøre denne operasjonen, har allerede sjekket
 
