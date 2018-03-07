@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class clientConnectTest{
+public class ClientConnectTest {
 	@InjectMocks
 	ClientConnect c1,c2;
 	
