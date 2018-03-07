@@ -58,7 +58,7 @@ public class ClientConnect implements Runnable {
 				dbquery.deleteUser(parsedData.get("user_id"));
 				break;
 			case "add_data":
-				dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data") /*TODO parsedData.get("time_stamp") is this needed?*/);
+        dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data"), parsedData.get("time_stamp"));
 				case "get_data":
 				break;
 			case "get_data":
