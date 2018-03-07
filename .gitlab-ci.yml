@@ -25,7 +25,7 @@ unittest-job:
     - build-job
   script:
     - "mvn package $MAVEN_CLI_OPTS"
-    - "cat app.core/target/site/jacoco/index.html"
+      #    - "cat app.core/target/site/jacoco/index.html"
 
 integrationtest-job:
   stage: test
