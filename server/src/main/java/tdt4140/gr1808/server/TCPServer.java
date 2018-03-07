@@ -1,9 +1,6 @@
 package tdt4140.gr1808.server;
 
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -36,11 +33,9 @@ public class TCPServer extends Thread {
 				System.out.println("Connected to " +
 					connectionSocket.getRemoteSocketAddress());
 
-				InputStream input = connectionSocket.getInputStream();
-				OutputStream output = connectionSocket.getOutputStream();
+				BufferedReader input = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+				DataOutputStream output = new DataOutputStream(connectionSocket.getOutputStream());
 
-				//Opprett sendAndRecieve-objekt
-				//sendAndRecieve(DBQuery, serverParser, input, output)
 				ClientConnect clientConnect = new ClientConnect(dbquery, serverParser,
 					input, output, connectionSocket);
 				Thread c = new Thread(clientConnect);
