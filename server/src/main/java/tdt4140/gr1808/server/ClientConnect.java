@@ -108,7 +108,16 @@ public class ClientConnect extends Thread {
 				dbquery.deleteUser(parsedData.get("user_id"));
 				break;
 			case "add_data":
-				dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data"), parsedData.get("time_stamp"));
+				String dataToAdd = parsedData.get("data");
+				String[] dataArray = dataToAdd.split(",");
+				
+				for(int i = 0; i < dataArray.length ;i++) {
+					String f = dataArray[i];
+					String puls = f.substring( 0, f.indexOf("_"));
+					String datetime = f.substring(f.indexOf("_")+1, f.length());    
+					
+					dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), puls, datetime);
+				}
 				break;
 			case "get_data":
 				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
