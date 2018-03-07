@@ -47,9 +47,6 @@ public class TCPServer extends Thread {
 	}
 
 	public int close() {
-		if (socketIsClosed())
-			return 2;
-
 		try {
 			serverSocket.close();
 			return 0;

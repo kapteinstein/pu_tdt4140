@@ -42,10 +42,10 @@ class TCPClient {
 
 public class TCPServerIT {
 	TCPServer server = null;
+	int port = 6789;
 
 	@Before
 	public void setUp() {
-		int port = 6789;
 		try {
 			server = new TCPServer(port);
 		} catch (IOException e) {
@@ -70,7 +70,6 @@ public class TCPServerIT {
 
 	@Test
 	public void clientConnectSuccessTest() {
-		int port = 6789;
 		TCPClient client = null;
 
 		try {
@@ -85,7 +84,6 @@ public class TCPServerIT {
 
 	@Test
 	public void clientConnectFailTest() {
-		int port = 6789;
 		TCPClient client = null;
 		server.close();
 		// the server is now closed
@@ -97,8 +95,13 @@ public class TCPServerIT {
 	}
 
 	@Test
+	public void serverDoubleClose() {
+		server.close();
+		assertEquals(0, server.close());
+	}
+
+	@Test
 	public void clientInputSteamTest() {
-		int port = 6789;
 		TCPClient client = null;
 		try {
 			client = new TCPClient(port);
@@ -117,7 +120,6 @@ public class TCPServerIT {
 
 	@Test
 	public void clientOutputSteamTest() {
-		int port = 6789;
 		TCPClient client = null;
 		try {
 			client = new TCPClient(port);
@@ -135,7 +137,6 @@ public class TCPServerIT {
 
 	@Test
 	public void clientServerInteractionTest() {
-		int port = 6789;
 		String data = "test data";
 		TCPClient client = null;
 		server.start();
