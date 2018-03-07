@@ -28,7 +28,7 @@ public class ClientConnectTest {
 	ServerParser p;
 	BufferedReader b1,b2;
 	Socket s;
-	OutputStream d;
+	DataOutputStream d;
 
 		@Test
 		public void inputToJsonTest() throws IOException{

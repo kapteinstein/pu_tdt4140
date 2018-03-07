@@ -10,13 +10,13 @@ public class ClientConnect extends Thread {
 	private DBQuery dbquery;
 	private ServerParser parser;
 	private BufferedReader inputStream;
-	private OutputStream outputStream;
+	private DataOutputStream outputStream;
 	private Socket connectionSocket;
 	
 	public ClientConnect(DBQuery dbquery,
 		     ServerParser parser,
 		     BufferedReader inputStream,
-		     OutputStream outputStream,
+		     DataOutputStream outputStream,
 		     Socket connectionSocket) {
 	this.dbquery = dbquery;
 	this.parser = parser;
@@ -87,11 +87,62 @@ public class ClientConnect extends Thread {
 				//tilbakemelding om at det var ugylding mode
 		}
 		*/
-		connect(parsedData); //denne vil bli tatt vekk nar det over blir ferdig
+		try {
+			connect(parsedData); //denne vil bli tatt vekk nar det over blir ferdig
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void connect(HashMap<String, String> parsedData) {
+	private void connect(HashMap<String, String> parsedData) throws Exception {
+		//FORMÅL: få modus, user etc fra en bruker og utføre kommandoen.
+		//Dersom man får returnert data, skal denne sendes på outputStream (kan evt gjøres i egen metode)
+		// DBQuery query = new DBQuery();  // ikke ha med
 
+
+		switch(parsedData.get("mode")) {
+			case "add_user":
+				dbquery.addUser(parsedData.get("user_type"), parsedData.get("name"));
+				break;
+			case "delete_user":
+				dbquery.deleteUser(parsedData.get("user_id"));
+				break;
+			case "add_data":
+				dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("data"), parsedData.get("time_stamp"));
+				break;
+			case "get_data":
+				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
+					parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+
+				try {
+					outputStream.writeUTF(stringData);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} //Legger dataen som skal til tjenesteyter ut på outputStreamen
+				break;
+			case "response":
+				JSONObject data = parser.encode(parsedData);
+				String melding = data.toString();
+				try {
+					outputStream.writeUTF(melding);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// legger HashMap ut på outputStream
+			default:
+				throw new Exception("This should never happen. Something is wrong in the ServerParser class");
+		}
+		//denne trenger ikke sjekke om brukeren får lov å gjøre denne operasjonen, har allerede sjekket
+
+		//parsedData er HashMap
+
+		//bruk parser til å stringifye dataen
+		//får dataen tilbake på denne formen: array?
+
+		//String mode = parsedData.getString("mode");
+		//kall rett metode i dbquery med en for-løkke for å sende inn/hente data
 	}
 	
 	public JSONObject inputToJson(BufferedReader input) throws IOException {
