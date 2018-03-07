@@ -10,18 +10,18 @@ public class ClientConnect extends Thread {
 	private DBQuery dbquery;
 	private ServerParser parser;
 	private BufferedReader inputStream;
-	private DataOutputStream outputStream;
+	private OutputStream outputStream;
 	private Socket connectionSocket;
 	
 	public ClientConnect(DBQuery dbquery,
 		     ServerParser parser,
-		     InputStream inputStream,
+		     BufferedReader inputStream,
 		     OutputStream outputStream,
 		     Socket connectionSocket) {
 	this.dbquery = dbquery;
 	this.parser = parser;
-	this.inputStream = new BufferedReader(new InputStreamReader(inputStream));
-	this.outputStream = new DataOutputStream(outputStream);
+	this.inputStream = inputStream;
+	this.outputStream = outputStream;
 	this.connectionSocket = connectionSocket;
 }
 	
@@ -93,19 +93,23 @@ public class ClientConnect extends Thread {
 	private void connect(HashMap<String, String> parsedData) {
 
 	}
+	
+	public JSONObject inputToJson(BufferedReader input) throws IOException {
+		JSONObject jsonData = new JSONObject();
+		String line;
+		StringBuilder sb = new StringBuilder();
+		while ((line = input.readLine()) != null) {
+			sb.append(line);
+		}
+		jsonData = new JSONObject(sb.toString());
+		return jsonData;
+	}
 
 	@Override
-	public void run() {
-		try {
-			JSONObject jsonData;
-			String line;
-			StringBuilder sb = new StringBuilder();
-			while ((line = inputStream.readLine()) != null) {
-				sb.append(line);
-			}
-			jsonData = new JSONObject(sb.toString());
+	public void run() {	
+		try{	
+			JSONObject jsonData = inputToJson(inputStream);
 			action(jsonData);
-
 		} catch(IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -115,7 +119,7 @@ public class ClientConnect extends Thread {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
+			} 
 		}
 	}
 }
