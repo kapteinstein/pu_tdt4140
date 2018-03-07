@@ -42,5 +42,10 @@ public class TCPServerIT {
 	public void tearDown() {
 		if (!server.socketIsClosed())
 			server.close();
+		try {
+			Thread.sleep(500);  // just to be sure
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
