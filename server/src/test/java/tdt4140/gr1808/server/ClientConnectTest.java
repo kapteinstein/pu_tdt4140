@@ -130,7 +130,7 @@ public class ClientConnectTest {
 	    	jsonObject.put("user_id", "1");
 	    	jsonObject.put("target_user_id", "1");
 	    	jsonObject.put("data_type", "puls");
-	    	jsonObject.put("start_datetime", "nå");
+	    	jsonObject.put("start_datetime", "nu");
 	    	jsonObject.put("end_datetime", "senere");
 	    	
 
@@ -151,7 +151,7 @@ public class ClientConnectTest {
 
 	    	
 	    	
-	        verify(dbQuery, times(1)).deletePulseData("1", "puls", "nå", "senere");
+	        verify(dbQuery, times(1)).deletePulseData("1", "puls", "nu", "senere");
 	    }
 	    
 	    @Test
@@ -185,13 +185,13 @@ public class ClientConnectTest {
 	    	jsonObject.put("user_id", "1");
 	    	jsonObject.put("data_type", "puls");
 	    	jsonObject.put("target_user_id", "1");
-	    	jsonObject.put("start_datetime", "nå");
+	    	jsonObject.put("start_datetime", "nu");
 	    	jsonObject.put("end_datetime", "senere");
 	    		
 			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
 			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-	    	when(dbQuery.getPulseData("1", "puls", "nå", "senere")).thenReturn("ok");
+	    	when(dbQuery.getPulseData("1", "puls", "nu", "senere")).thenReturn("ok");
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
@@ -202,7 +202,7 @@ public class ClientConnectTest {
 	    	
 	    	clientConnect.run();
 
-	    	verify(dbQuery, times(1)).getPulseData("1", "puls", "nå", "senere");
+	    	verify(dbQuery, times(1)).getPulseData("1", "puls", "nu", "senere");
 	    }
 	    /*
 	    @Test
