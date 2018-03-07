@@ -14,7 +14,7 @@ Connection con;
 	public Connection connect() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://mysql.stud.ntnu.no:3306/hkmardal_databasen", "hkmardal_admin", "sommer");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql.stud.ntnu.no:3306/hkmardal_databasen?useSSL=false", "hkmardal_admin", "sommer");
 			return con;
 		} catch(Exception e) {
 			System.out.println("Could not connect to database.");
