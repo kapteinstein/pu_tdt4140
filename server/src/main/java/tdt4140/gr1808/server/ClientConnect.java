@@ -71,7 +71,8 @@ public class ClientConnect implements Runnable {
 				private JSONObject melding = parser.encode(parsedData);
 				outputStream.writeUTF(melding);
 				// legger HashMap ut på outputStream
-			default: //ERROR CRAZY????
+			default:
+          throw new Exception("This should never happen. Something is wrong in the ServerParser class")
 		}
 		//denne trenger ikke sjekke om brukeren får lov å gjøre denne operasjonen, har allerede sjekket
 
