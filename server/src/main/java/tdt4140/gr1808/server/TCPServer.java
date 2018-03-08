@@ -25,7 +25,7 @@ public class TCPServer extends Thread {
 	}
 
 	public void run() {
-		while (true) {
+		while (!socketIsClosed()) {
 			try {
 				System.out.println("Waiting for client on port " +
 					serverSocket.getLocalPort() + "...");
@@ -47,16 +47,17 @@ public class TCPServer extends Thread {
 	}
 
 	public int close() {
-		if (!serverSocket.isClosed()) {
-			try {
-				serverSocket.close();
-				return 0;
-			} catch (IOException e) {
-				e.printStackTrace();
-				return 1;
-			}
+		try {
+			serverSocket.close();
+			return 0;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return 1;
 		}
-		return 0;  // already closed
+	}
+
+	public boolean socketIsClosed() {
+		return serverSocket.isClosed();
 	}
 
 	public static void main(String[] args) {
