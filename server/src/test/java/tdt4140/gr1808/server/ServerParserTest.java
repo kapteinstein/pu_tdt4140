@@ -29,12 +29,10 @@ public class ServerParserTest {
 	public void tests_decode_add_user() throws JSONException {
 		jsonObject.put("mode", "add_user");
 		jsonObject.put("user_type", "datagiver");
-		jsonObject.put("target_user_id", "1");
 		jsonObject.put("name", "Peter Pukk");
 
 		hashMap.put("mode", "add_user");
 		hashMap.put("user_type", "datagiver");
-		hashMap.put("target_user_id", "1");
 		hashMap.put("name", "Peter Pukk");
 
 		assertTrue(hashMap.equals(parser.decode(jsonObject)));

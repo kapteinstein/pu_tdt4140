@@ -136,12 +136,10 @@ public class ServerParser {
 	private HashMap<String, String> decodeAddUser(JSONObject jsonObject) {
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		String user_type;
-		String target_user_id;
 		String name;
 
 		try {
 			user_type = jsonObject.getString("user_type");
-			target_user_id = jsonObject.getString("target_user_id");
 			name = jsonObject.getString("name");
 		} catch (JSONException e) {
 			return (missingKey(e));
@@ -149,7 +147,6 @@ public class ServerParser {
 		hashMap.put("mode", "add_user");
 		hashMap.put("name", name);
 		hashMap.put("user_type", user_type);
-		hashMap.put("target_user_id", target_user_id);
 
 		return hashMap;
 	}

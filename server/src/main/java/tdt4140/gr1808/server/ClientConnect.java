@@ -4,7 +4,9 @@ import java.io.*;
 import java.net.Socket;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ClientConnect extends Thread {
 	private DBQuery dbquery;
@@ -108,24 +110,23 @@ public class ClientConnect extends Thread {
 				dbquery.deleteUser(parsedData.get("user_id"));
 				break;
 			case "add_data":
-				String dataToAdd = parsedData.get("data");
-				String[] dataArray = dataToAdd.split(",");
+				ServerParser serverParser = new ServerParser();
+				List<Touple> arrayList = serverParser.deStringify(parsedData.get("data"));
 				
-				for(int i = 0; i < dataArray.length ;i++) {
-					String f = dataArray[i];
-					String puls = f.substring( 0, f.indexOf("_"));
-					String datetime = f.substring(f.indexOf("_")+1, f.length());    
-					
-					dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), puls, datetime);
+				for (int i = 0; i < arrayList.size(); i++) {
+					dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), arrayList.get(i).getPuls(), arrayList.get(i).getDateTime());
 				}
 				break;
+			case "delete_data":
+				dbquery.deletePulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+			
 			case "get_data":
 				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
 					parsedData.get("start_datetime"), parsedData.get("end_datetime"));
 
 				try {
 					outputStream.writeUTF(stringData);
-				} catch (IOException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} //Legger dataen som skal til tjenesteyter ut på outputStreamen
@@ -141,7 +142,7 @@ public class ClientConnect extends Thread {
 				}
 				// legger HashMap ut på outputStream
 			default:
-				throw new Exception("This should never happen. Something is wrong in the ServerParser class");
+				throw new Exception("This should never happen. Mode was: " + parsedData.get("mode") + parsedData.get("data"));
 		}
 		//denne trenger ikke sjekke om brukeren får lov å gjøre denne operasjonen, har allerede sjekket
 
