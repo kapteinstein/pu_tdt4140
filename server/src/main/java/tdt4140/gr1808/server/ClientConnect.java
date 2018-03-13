@@ -119,7 +119,7 @@ public class ClientConnect extends Thread {
 				break;
 			case "delete_data":
 				dbquery.deletePulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
-			
+				break;
 			case "get_data":
 				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
 					parsedData.get("start_datetime"), parsedData.get("end_datetime"));
@@ -140,6 +140,7 @@ public class ClientConnect extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				break;
 				// legger HashMap ut på outputStream
 			default:
 				throw new Exception("This should never happen. Mode was: " + parsedData.get("mode") + parsedData.get("data"));
