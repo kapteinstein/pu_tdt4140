@@ -88,7 +88,6 @@ public class DBQueryTest {
 	@Test
 	public void getUserTypeTest() {
 		String userTypeString = dBQuery.getUserType("12");
-		System.out.println(userTypeString);
 		assertTrue(userTypeString.equals("username/type"));
 	}
 }
