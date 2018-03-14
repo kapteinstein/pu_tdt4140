@@ -31,9 +31,9 @@ protected Connection con;
 			stmnt.executeUpdate("insert into user(user_type, name) values('" + user_type + "', '" + name + "')");
 			stmnt.close();
 		} catch(Exception e) {
-			return fillHashMap("failure", null, e.getMessage());
+			return fillHashMapFailure(e.getMessage());
 		}
-		return fillHashMap("success", null, "User was added successfully");
+		return fillHashMapMessage("User was added successfully");
 	}
 	
 	//Deletes a user from the database
@@ -43,9 +43,9 @@ protected Connection con;
 			stmnt.executeUpdate("delete from user where user_id = " + user_id);
 			stmnt.close();
 		} catch(Exception e) {
-			return fillHashMap("failure", null, e.getMessage());
+			return fillHashMapFailure(e.getMessage());
 		}
-		return fillHashMap("success", null, "User was deleted successfully");
+		return fillHashMapMessage("User was deleted successfully");
 	}
 	
 	//Deletes pulse data for a given user for a given time-period from the database
@@ -56,9 +56,9 @@ protected Connection con;
 					start_datetime + "\" and \"" + end_datetime + "\"");
 			stmnt.close();
 		} catch(Exception e) {
-			return fillHashMap("failure", null, e.getMessage());
+			return fillHashMapFailure(e.getMessage());
 		}
-		return fillHashMap("success", null, "Pulse-data deleted successfully");
+		return fillHashMapMessage("Pulse-data deleted successfully");
 	}
 	
 	//Adds pulse data for a given user for a given time-period to the database
@@ -69,9 +69,9 @@ protected Connection con;
 			stmnt.executeUpdate("insert into pulse_data(pulse) values('" + pulse + "')");
 			stmnt.close();
 		} catch(Exception e) {
-			return fillHashMap("failure", null, e.getMessage());
+			return fillHashMapFailure(e.getMessage());
 		}
-		return fillHashMap("success", null, "Pulse-data added successfully");
+		return fillHashMapMessage("Pulse-data added successfully");
 	}
 	
 	//Returns pulse data on the format "pulse_timestamp,pulse_timestamp, ..."
@@ -87,18 +87,17 @@ protected Connection con;
 			str = str.replaceAll(",$", "");
 			stmnt.close();
 		} catch(Exception e) {
-			return fillHashMap("failure", null, e.getMessage());
+			return fillHashMapFailure(e.getMessage());
 		}
 		if (str == null || str.equals("")) {
-			return fillHashMap("failure", null, "Data is null");
+			return fillHashMapFailure("Data is null");
 		}
-		return fillHashMap("success", str, "Pulse-data retireved successfully");
+		return fillHashMapData(str);
 	}
 	
 	//Returns the username of a user with a given user_id
 	public HashMap<String, String> getUsername(String user_id) {
 		String username = null;
-		HashMap<String, String> hm = new HashMap<>();
 		try {
 			Statement stmnt = con.createStatement();
 			ResultSet rs = stmnt.executeQuery("select name from user where user_id = " + user_id);
@@ -107,12 +106,12 @@ protected Connection con;
 			}
 			stmnt.close();
 		} catch (Exception e) {
-			return fillHashMap("failure", null, e.getMessage());
+			return fillHashMapFailure(e.getMessage());
 		}
 		if (username == null) {
-			return fillHashMap("failure", null, "Data is null");
+			return fillHashMapFailure("Data is null");
 		}
-		return fillHashMap("success", username, "Username retrieved successfully");
+		return fillHashMapData(username);
 	}
 
 	//Returns the user type of a user with a given user_id
@@ -126,19 +125,35 @@ protected Connection con;
 			}
 			stmnt.close();
 		} catch(Exception e) {
-			return fillHashMap("failure", null, e.getMessage());
+			return fillHashMapFailure(e.getMessage());
 		}
 		if (userType == null) {
-			return fillHashMap("failure", null, "Data is null");
+			return fillHashMapFailure("Data is null");
 		}
-		return fillHashMap("success", userType, "User type retrieved successfully");
+		return fillHashMapData(userType);
 	}
 	
-	private HashMap<String, String> fillHashMap(String status, String data, String message) {
+	private HashMap<String, String> fillHashMapFailure(String message) {
 		HashMap<String, String> hm = new HashMap<>();
-		hm.put("status", status);
+		hm.put("mode", "response");
+		hm.put("type", "failure");
+		hm.put("data", message);
+		return hm;
+	}
+	
+	private HashMap<String, String> fillHashMapMessage(String message) {
+		HashMap<String, String> hm = new HashMap<>();
+		hm.put("mode", "response");
+		hm.put("type", "message");
+		hm.put("data", message);
+		return hm;
+	}
+	
+	private HashMap<String, String> fillHashMapData(String data) {
+		HashMap<String, String> hm = new HashMap<>();
+		hm.put("mode", "response");
+		hm.put("type", "message");
 		hm.put("data", data);
-		hm.put("message", message);
 		return hm;
 	}
 }
