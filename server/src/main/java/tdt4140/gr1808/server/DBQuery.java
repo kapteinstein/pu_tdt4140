@@ -26,14 +26,20 @@ protected Connection con;
 	
 	//Adds a user to the database
 	public HashMap<String, String> addUser(String user_type, String name) {
+		String returnedUserId = null;
 		try {
 			Statement stmnt = con.createStatement();
 			stmnt.executeUpdate("insert into user(user_type, name) values('" + user_type + "', '" + name + "')");
 			stmnt.close();
+			Statement stmnt1 = con.createStatement();
+			ResultSet rs = stmnt1.executeQuery("select user_id from user where name = '" + name + "'");
+			if (rs.next()) {
+				returnedUserId = rs.getString(1);
+			}
 		} catch(Exception e) {
 			return fillHashMapFailure(e.getMessage());
 		}
-		return fillHashMapMessage("User was added successfully");
+		return fillHashMapMessage("User was added successfully with userID " + returnedUserId);
 	}
 	
 	//Deletes a user from the database
