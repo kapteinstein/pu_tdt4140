@@ -33,11 +33,9 @@ public class TCPServer extends Thread {
 				System.out.println("Connected to " +
 					connectionSocket.getRemoteSocketAddress());
 
-				BufferedReader input = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-				DataOutputStream output = new DataOutputStream(connectionSocket.getOutputStream());
+				ClientConnection connection = new ClientConnection(connectionSocket);
 
-				ClientConnect clientConnect = new ClientConnect(dbquery, serverParser,
-					input, output, connectionSocket);
+				ClientConnect clientConnect = new ClientConnect(dbquery, serverParser, connection);
 				Thread c = new Thread(clientConnect);
 				c.start();
 			} catch (IOException e) {
