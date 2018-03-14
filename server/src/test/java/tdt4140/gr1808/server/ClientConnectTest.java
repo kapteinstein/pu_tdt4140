@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.json.JSONObject;
 
 public class ClientConnectTest {
+	
+	/*
 	@InjectMocks
 	ClientConnect c1,c2;
 	
@@ -59,24 +61,22 @@ public class ClientConnectTest {
 				s2 = error.toString();
 			}
 			assertEquals(testString2,s2);
-	}
+	}*/
 		
 		private DBQuery dbQuery;
 		private ServerParser serverParser;
-		private BufferedReader inputStream;
-		private DataOutputStream outputStream;
-		private Socket connectionSocket;
-        ClientConnect clientConnect;
-        JSONObject jsonObject;
-        ByteArrayInputStream byteArray;
-		
+        private ClientConnect clientConnect;
+        private JSONObject jsonObject;
+		private ClientConnection clientConnection;
+		private HashMap<String, String> hashMap;
+        
 	    @Before
 	    public void setUp() {
 	        dbQuery = mock(DBQuery.class);
 	        serverParser = new ServerParser();
-	        outputStream = mock(DataOutputStream.class);
-	        connectionSocket = mock(Socket.class);
 	        jsonObject = new JSONObject();
+	        clientConnection = mock(ClientConnection.class);
+	        hashMap = new HashMap<String, String>();
 	    }
 	    
 	    @Test
@@ -85,17 +85,17 @@ public class ClientConnectTest {
 	    	jsonObject.put("user_type", "datagiver");
 	    	jsonObject.put("name", "Peter Pukk");
 	    	
-			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
-			inputStream = new BufferedReader(new InputStreamReader(byteArray));
+	    	hashMap.put("message", "boner");
+
 	    	
-			when(dbQuery.addUser(isA(String.class), isA(String.class))).thenReturn(new HashMap<String, String>());
+	    	when(clientConnection.read()).thenReturn(jsonObject);
+	    	doNothing().when(clientConnection).write(any());
+			when(dbQuery.addUser(isA(String.class), isA(String.class))).thenReturn(hashMap);
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
 	        		serverParser, 
-	        		inputStream,
-				    outputStream,
-				    connectionSocket);
+				    clientConnection);
 	    	
 	    	clientConnect.run();
 	        
@@ -107,19 +107,17 @@ public class ClientConnectTest {
 	    	jsonObject.put("mode", "delete_user");
 	    	jsonObject.put("user_id", "1");
 	    	jsonObject.put("target_user_id", "1");
-
 	    	
-			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
-			inputStream = new BufferedReader(new InputStreamReader(byteArray));
+	    	hashMap.put("message", "boner");
 	    	
-	    	when(dbQuery.deleteUser(isA(String.class))).thenReturn(new HashMap<String, String>());
+	    	when(clientConnection.read()).thenReturn(jsonObject);
+	    	doNothing().when(clientConnection).write(any());
+	    	when(dbQuery.deleteUser(isA(String.class))).thenReturn(hashMap);
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
-	        		serverParser, 
-	        		inputStream,
-				    outputStream,
-				    connectionSocket);
+	        		serverParser,
+	        		clientConnection);
 	    	
 	    	clientConnect.run();
 	        
@@ -135,19 +133,16 @@ public class ClientConnectTest {
 	    	jsonObject.put("start_datetime", "nu");
 	    	jsonObject.put("end_datetime", "senere");
 	    	
-
+	    	hashMap.put("message", "boner");
 	    	
-			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
-			inputStream = new BufferedReader(new InputStreamReader(byteArray));
-	    	
-	    	when(dbQuery.deletePulseData(isA(String.class), isA(String.class), isA(String.class), isA(String.class))).thenReturn(new HashMap<String, String>());
+	    	when(clientConnection.read()).thenReturn(jsonObject);
+	    	doNothing().when(clientConnection).write(any());
+	    	when(dbQuery.deletePulseData(isA(String.class), isA(String.class), isA(String.class), isA(String.class))).thenReturn(hashMap);
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
 	        		serverParser, 
-	        		inputStream,
-				    outputStream,
-				    connectionSocket);
+	        		clientConnection);
 	    	
 	    	clientConnect.run();
 
@@ -163,18 +158,17 @@ public class ClientConnectTest {
 	    	jsonObject.put("target_user_id", "1");
 	    	jsonObject.put("data_type", "puls");
 	    	jsonObject.put("data", "88_1997-11-27 13:25:33");
-	    		
-			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
-			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-	    	when(dbQuery.addPulseData(isA(String.class), isA(String.class), isA(String.class), isA(String.class))).thenReturn(new HashMap<String, String>());
+	    	hashMap.put("message", "boner");
+	    		
+	    	when(clientConnection.read()).thenReturn(jsonObject);
+	    	doNothing().when(clientConnection).write(any());
+	    	when(dbQuery.addPulseData(isA(String.class), isA(String.class), isA(String.class), isA(String.class))).thenReturn(hashMap);
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
 	        		serverParser, 
-	        		inputStream,
-				    outputStream,
-				    connectionSocket);
+	        		clientConnection);
 	    	
 	    		clientConnect.run();
 
@@ -189,18 +183,17 @@ public class ClientConnectTest {
 	    	jsonObject.put("target_user_id", "1");
 	    	jsonObject.put("start_datetime", "nu");
 	    	jsonObject.put("end_datetime", "senere");
-	    		
-			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
-			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-			when(dbQuery.getPulseData("1", "puls", "nu", "senere")).thenReturn(new HashMap<String, String>());
+	    	hashMap.put("message", "boner");
+
+	    	when(clientConnection.read()).thenReturn(jsonObject);
+	    	doNothing().when(clientConnection).write(any());
+			when(dbQuery.getPulseData("1", "puls", "nu", "senere")).thenReturn(hashMap);
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
 	        		serverParser, 
-	        		inputStream,
-				    outputStream,
-				    connectionSocket);
+	        		clientConnection);
 	    	
 	    	clientConnect.run();
 
