@@ -91,7 +91,10 @@ public class ClientConnect extends Thread {
 		try {
 			if (!hm.isEmpty()) {
 				connection.write(parser.encode(hm));
-			}	
+			} 
+			else {
+				throw new Exception("The hashmap that was not supposed to be empty was empty...");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
