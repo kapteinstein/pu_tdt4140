@@ -5,8 +5,7 @@ import java.util.HashMap;
 
 public class DBQuery {
 
-private Connection con;
-//private HashMap<String, String> result;
+protected Connection con;
 	
 	public DBQuery() {
 		this.con = connect();
@@ -141,13 +140,5 @@ private Connection con;
 		hm.put("data", data);
 		hm.put("message", message);
 		return hm;
-	}
-	
-	public static void main(String[] args) {
-		DBQuery db = new DBQuery();
-		HashMap<String, String> hm = db.getPulseData("100", "pulse", "2017-10-10 11:11:11", "2019-10-10 11:11:11");
-		String str;
-		str = hm.get("message") + "\n" + hm.get("data");
-		System.out.println(str);
 	}
 }
