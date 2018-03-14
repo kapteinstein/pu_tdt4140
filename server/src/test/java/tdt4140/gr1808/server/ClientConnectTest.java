@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -86,7 +88,7 @@ public class ClientConnectTest {
 			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
 			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-	    	doNothing().when(dbQuery).addUser(isA(String.class), isA(String.class));
+			when(dbQuery.addUser(isA(String.class), isA(String.class))).thenReturn(new HashMap<String, String>());
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
@@ -110,7 +112,7 @@ public class ClientConnectTest {
 			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
 			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-	    	doNothing().when(dbQuery).deleteUser(isA(String.class));
+	    	when(dbQuery.deleteUser(isA(String.class))).thenReturn(new HashMap<String, String>());
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
@@ -138,7 +140,7 @@ public class ClientConnectTest {
 			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
 			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-	    	doNothing().when(dbQuery).deletePulseData(isA(String.class), isA(String.class), isA(String.class), isA(String.class));
+	    	when(dbQuery.deletePulseData(isA(String.class), isA(String.class), isA(String.class), isA(String.class))).thenReturn(new HashMap<String, String>());
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
@@ -165,7 +167,7 @@ public class ClientConnectTest {
 			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
 			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-	    	doNothing().when(dbQuery).addPulseData(isA(String.class), isA(String.class), isA(String.class), isA(String.class));
+	    	when(dbQuery.addPulseData(isA(String.class), isA(String.class), isA(String.class), isA(String.class))).thenReturn(new HashMap<String, String>());
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
@@ -191,7 +193,7 @@ public class ClientConnectTest {
 			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
 			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-	    	when(dbQuery.getPulseData("1", "puls", "nu", "senere")).thenReturn("ok");
+			when(dbQuery.getPulseData("1", "puls", "nu", "senere")).thenReturn(new HashMap<String, String>());
 	        
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 

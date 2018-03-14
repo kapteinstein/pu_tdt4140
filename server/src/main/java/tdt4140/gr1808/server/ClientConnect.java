@@ -97,6 +97,8 @@ public class ClientConnect extends Thread {
 	}
 
 	private void connect(HashMap<String, String> parsedData) throws Exception {
+		String stringData = "";
+		HashMap<String, String> hm;
 		//FORMÅL: få modus, user etc fra en bruker og utføre kommandoen.
 		//Dersom man får returnert data, skal denne sendes på outputStream (kan evt gjøres i egen metode)
 		// DBQuery query = new DBQuery();  // ikke ha med
@@ -104,32 +106,36 @@ public class ClientConnect extends Thread {
 
 		switch(parsedData.get("mode")) {
 			case "add_user":
-				dbquery.addUser(parsedData.get("user_type"), parsedData.get("name"));
+				hm = dbquery.addUser(parsedData.get("user_type"), parsedData.get("name"));
+				stringData = hm.get("message");
 				break;
 			case "delete_user":
-				dbquery.deleteUser(parsedData.get("user_id"));
+				hm = dbquery.deleteUser(parsedData.get("user_id"));
+				stringData = hm.get("message");
 				break;
 			case "add_data":
 				ServerParser serverParser = new ServerParser();
 				List<Touple> arrayList = serverParser.deStringify(parsedData.get("data"));
 				
 				for (int i = 0; i < arrayList.size(); i++) {
-					dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), arrayList.get(i).getPuls(), arrayList.get(i).getDateTime());
+					hm = dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"), arrayList.get(i).getPuls(), arrayList.get(i).getDateTime());
+					stringData += hm.get("message") + "\n";
 				}
 				break;
 			case "delete_data":
-				dbquery.deletePulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				hm = dbquery.deletePulseData(parsedData.get("user_id"), parsedData.get("data_type"), parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				stringData = hm.get("message");
 				break;
 			case "get_data":
-				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
-					parsedData.get("start_datetime"), parsedData.get("end_datetime"));
-
-				try {
-					outputStream.writeUTF(stringData);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} //Legger dataen som skal til tjenesteyter ut på outputStreamen
+				hm = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
+						parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+//				String stringData = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
+//					parsedData.get("start_datetime"), parsedData.get("end_datetime"));
+				if (hm.get("status").equals("success")) {
+					stringData = hm.get("message") + "\n" + hm.get("data");
+				} else {
+					stringData = hm.get("message");
+				}
 				break;
 			case "response":
 				JSONObject data = parser.encode(parsedData);
@@ -145,6 +151,12 @@ public class ClientConnect extends Thread {
 			default:
 				throw new Exception("This should never happen. Mode was: " + parsedData.get("mode") + parsedData.get("data"));
 		}
+		try {
+			outputStream.writeUTF(stringData);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //Legger dataen som skal til tjenesteyter ut på outputStreamen
 		//denne trenger ikke sjekke om brukeren får lov å gjøre denne operasjonen, har allerede sjekket
 
 		//parsedData er HashMap

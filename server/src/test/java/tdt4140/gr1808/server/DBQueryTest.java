@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -75,19 +76,19 @@ public class DBQueryTest {
 	
 	@Test
 	public void getPulseDataTest() throws SQLException {
-		String pulseDataString = dBQuery.getPulseData("99", "puls", "nu", "senere");
-		assertTrue(pulseDataString.equals("69_timestamp,69_timestamp"));
+		HashMap<String, String> pulseDataHm = dBQuery.getPulseData("99", "puls", "nu", "senere");
+		assertTrue(pulseDataHm.get("data").equals("69_timestamp,69_timestamp"));
 	}
 	
 	@Test
 	public void getUserNameStringTest() {
-		String userTypeString = dBQuery.getUsername("1");
-		assertTrue(userTypeString.equals("username/type"));
+		HashMap<String, String> usernameHm = dBQuery.getUsername("1");
+		assertTrue(usernameHm.get("data").equals("username/type"));
 	}
 	
 	@Test
 	public void getUserTypeTest() {
-		String userTypeString = dBQuery.getUserType("12");
-		assertTrue(userTypeString.equals("username/type"));
+		HashMap<String, String> userTypeHm = dBQuery.getUserType("12");
+		assertTrue(userTypeHm.get("data").equals("username/type"));
 	}
 }
