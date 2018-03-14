@@ -21,8 +21,10 @@ public class ClientConnect extends Thread {
 	public void run() {
 		try {
 			JSONObject jsonData = connection.read();
-			action(jsonData);
-		} catch (IOException e) {
+			HashMap<String, String> parsedData = parser.decode(jsonData);
+			//Error/privilege checking goes here---------------------------------------------------------------------------------------
+			connect(parsedData);
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (!connection.isClosed()) {
@@ -32,15 +34,6 @@ public class ClientConnect extends Thread {
 					e.printStackTrace();
 				}
 			}
-		}
-	}
-	
-	private void action(JSONObject jsonData) {
-		HashMap<String, String> parsedData = parser.decode(jsonData);
-		try {
-			connect(parsedData);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -54,36 +47,33 @@ public class ClientConnect extends Thread {
 			break;
 		
 		case "delete_user":
-			hm = dbquery.deleteUser(parsedData.get("user_id"));
+			hm = dbquery.deleteUser(parsedData.get("target_user_id"));
 			break;
 		
 		case "add_data":
 			List<Touple> arrayList = parser.deStringify(parsedData.get("data"));
 
 			for (int i = 0; i < arrayList.size(); i++) {
-				hm = dbquery.addPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
+				hm = dbquery.addPulseData(parsedData.get("target_user_id"), parsedData.get("data_type"),
 						arrayList.get(i).getPuls(), arrayList.get(i).getDateTime());
 			}
 			break;
 		
 		case "delete_data":
-			hm = dbquery.deletePulseData(parsedData.get("user_id"), parsedData.get("data_type"),
+			hm = dbquery.deletePulseData(parsedData.get("target_user_id"), parsedData.get("data_type"),
 					parsedData.get("start_datetime"), parsedData.get("end_datetime"));
 			break;
 		
 		case "get_data":
-			hm = dbquery.getPulseData(parsedData.get("user_id"), parsedData.get("data_type"),
+			hm = dbquery.getPulseData(parsedData.get("target_user_id"), parsedData.get("data_type"),
 					parsedData.get("start_datetime"), parsedData.get("end_datetime"));
 			break;
 		
 		case "response":
-			JSONObject data = parser.encode(parsedData);
-			try {
-				connection.write(data);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			//This means an error was found in the instruction from the client
+			hm = parsedData;
 			break;
+		
 		default:
 			throw new Exception(
 					"This should never happen. Mode was: " + parsedData.get("mode") + parsedData.get("data"));
@@ -93,7 +83,7 @@ public class ClientConnect extends Thread {
 				connection.write(parser.encode(hm));
 			} 
 			else {
-				throw new Exception("The hashmap that was not supposed to be empty was empty...");
+				throw new Exception("The hashmap (hm) that was not supposed to be empty was empty... Nothing was sent back to the client");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

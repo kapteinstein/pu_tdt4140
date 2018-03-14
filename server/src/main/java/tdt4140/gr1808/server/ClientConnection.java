@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
@@ -24,10 +25,19 @@ public class ClientConnection {
 	}
 	
 	public JSONObject read() throws IOException {
-        if(inputStream.available() > 0) {
+		//Waiting for 0.01s to make sure the data is available on stream (if removed it causes an error sometimes)
+		try {
+			TimeUnit.SECONDS.sleep(1/100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(inputStream.available() > 0) {
             String jsonObjectString = inputStream.readUTF();
             return new JSONObject(jsonObjectString);
-        }   
+        }
+        System.out.println("VI KOMMER HIT");
         return new JSONObject();
 	}
 	
