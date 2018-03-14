@@ -136,7 +136,7 @@ protected Connection con;
 	private HashMap<String, String> fillHashMapFailure(String message) {
 		HashMap<String, String> hm = new HashMap<>();
 		hm.put("mode", "response");
-		hm.put("type", "failure");
+		hm.put("type", "error");
 		hm.put("data", message);
 		return hm;
 	}
@@ -152,7 +152,7 @@ protected Connection con;
 	private HashMap<String, String> fillHashMapData(String data) {
 		HashMap<String, String> hm = new HashMap<>();
 		hm.put("mode", "response");
-		hm.put("type", "message");
+		hm.put("type", "data");
 		hm.put("data", data);
 		return hm;
 	}
