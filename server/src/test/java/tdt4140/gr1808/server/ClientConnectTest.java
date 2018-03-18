@@ -1,15 +1,10 @@
 package tdt4140.gr1808.server;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import java.io.*;
-import java.net.Socket;
 import java.util.HashMap;
 
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
 import org.junit.Before;
 import org.json.JSONObject;
 
@@ -37,8 +32,9 @@ public class ClientConnectTest {
 	    	jsonObject.put("user_type", "datagiver");
 	    	jsonObject.put("name", "Peter Pukk");
 	    	
+	    	hashMap.put("mode", "response");
+	    	hashMap.put("type", "message");
 	    	hashMap.put("message", "boner");
-
 	    	
 	    	when(clientConnection.read()).thenReturn(jsonObject);
 	    	doNothing().when(clientConnection).write(any());
@@ -60,6 +56,8 @@ public class ClientConnectTest {
 	    	jsonObject.put("user_id", "1");
 	    	jsonObject.put("target_user_id", "1");
 	    	
+	    	hashMap.put("mode", "response");
+	    	hashMap.put("type", "message");
 	    	hashMap.put("message", "boner");
 	    	
 	    	when(clientConnection.read()).thenReturn(jsonObject);
@@ -85,6 +83,8 @@ public class ClientConnectTest {
 	    	jsonObject.put("start_datetime", "nu");
 	    	jsonObject.put("end_datetime", "senere");
 	    	
+	    	hashMap.put("mode", "response");
+	    	hashMap.put("type", "message");
 	    	hashMap.put("message", "boner");
 	    	
 	    	when(clientConnection.read()).thenReturn(jsonObject);
@@ -111,6 +111,8 @@ public class ClientConnectTest {
 	    	jsonObject.put("data_type", "puls");
 	    	jsonObject.put("data", "88_1997-11-27 13:25:33");
 	    	
+	    	hashMap.put("mode", "response");
+	    	hashMap.put("type", "message");
 	    	hashMap.put("message", "boner");
 	    		
 	    	when(clientConnection.read()).thenReturn(jsonObject);
@@ -136,6 +138,8 @@ public class ClientConnectTest {
 	    	jsonObject.put("start_datetime", "nu");
 	    	jsonObject.put("end_datetime", "senere");
 	    	
+	    	hashMap.put("mode", "response");
+	    	hashMap.put("type", "message");
 	    	hashMap.put("message", "boner");
 
 	    	when(clientConnection.read()).thenReturn(jsonObject);
@@ -151,27 +155,30 @@ public class ClientConnectTest {
 
 	    	verify(dbQuery, times(1)).getPulseData("1", "puls", "nu", "senere");
 	    }
-	    /*
+	    
 	    @Test
 	    public void connectionResponseTest() throws IOException {
 	    	jsonObject.put("mode", "response");
 	    	jsonObject.put("type", "error");
 	    	jsonObject.put("data", "Du er en baijs");
-	    		
-			byteArray = new ByteArrayInputStream(jsonObject.toString().getBytes());
-			inputStream = new BufferedReader(new InputStreamReader(byteArray));
 	    	
-	    	doNothing().when(outputStream).writeUTF(jsonObject.toString());
+	    	hashMap.put("mode", "response");
+	    	hashMap.put("type", "message");
+	    	hashMap.put("message", "boner");
+	    	
+	    	serverParser = mock(ServerParser.class);
+	    	when(serverParser.decode(jsonObject)).thenReturn(hashMap);
+	    	when(serverParser.encode(any())).thenReturn(jsonObject);
+	    	when(clientConnection.read()).thenReturn(jsonObject);
+	    	doNothing().when(clientConnection).write(any());
 	    	
 	    	clientConnect = new ClientConnect(
 	        		dbQuery, 
 	        		serverParser, 
-	        		inputStream,
-				    outputStream,
-				    connectionSocket);
+	        		clientConnection);
 	    	
 	    	clientConnect.run();
 
-	    	verify(outputStream, times(1)).writeUTF(jsonObject.toString());
-	    }*/
+	    	verify(clientConnection, times(1)).write(jsonObject);
+	    }
 }

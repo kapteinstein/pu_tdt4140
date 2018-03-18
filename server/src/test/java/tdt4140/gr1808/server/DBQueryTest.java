@@ -91,4 +91,13 @@ public class DBQueryTest {
 		HashMap<String, String> userTypeHm = dBQuery.getUserType("12");
 		assertTrue(userTypeHm.get("data").equals("username/type"));
 	}
+	
+	@Test
+	public void fillHashMapFailureTest() {
+		HashMap<String, String> userTypeHm = dBQuery.getUserType("12");
+		userTypeHm = dBQuery.getUserType("12");
+		userTypeHm = dBQuery.getUserType("12");
+		
+		assertTrue(userTypeHm.toString().equals("{mode=response, data=Data is null, type=error}"));
+	}
 }
